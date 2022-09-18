@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import { BrowserRouter} from "react-router-dom";
+import { createContext } from "react";
+
+import AllPages from "./pages/AllPages";
 
 function App() {
+  const [isAuth, setIsAuth] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem("auth")) {
+      console.log(localStorage.getItem("auth") == true)
+      setIsAuth(true)
+    }
+}, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Auth.Provider value={{
+      isAuth,
+      setIsAuth,
+    }}>
+      <BrowserRouter >
+        <AllPages isAuth={isAuth}/>
+      </BrowserRouter>
+    </Auth.Provider>
+  )
 }
 
+export const Auth = createContext({});
 export default App;
